@@ -89,7 +89,7 @@ metadata:
   name: sg-url-routing-ingress
   namespace: firestorm-sg
   annotations:
-    kubernetes.io/ingress.class: singapore
+    kubernetes.io/ingress.class: nginx-ingress-controller-sg
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
