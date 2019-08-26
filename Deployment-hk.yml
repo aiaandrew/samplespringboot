@@ -89,7 +89,7 @@ metadata:
   name: hk-url-routing-ingress
   namespace: firestorm-hk
   annotations:
-    kubernetes.io/ingress.class: hongkong
+    kubernetes.io/ingress.class: nginx-ingress-controller-hk
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
