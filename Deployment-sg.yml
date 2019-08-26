@@ -90,7 +90,7 @@ metadata:
   namespace: firestorm-sg
   annotations:
     kubernetes.io/ingress.class: singapore
-    nginx.ingress.kubernetes.io/rewrite-target: /sg/
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: firestorm-sg.southeast.cloudapp.azure.com
