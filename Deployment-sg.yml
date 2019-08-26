@@ -10,7 +10,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: singapore-quote-deploy
+  name: sg-quote-deploy
   namespace: firestorm-sg
 spec:  
   replicas: 3
@@ -48,7 +48,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Singapore-product-deploy
+  name: sg-product-deploy
   namespace: firestorm-sg
 spec:
   replicas: 3
@@ -93,7 +93,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: firestorm-sg.southeast.cloudapp.azure.com
+  - #host: firestorm-sg.southeast.cloudapp.azure.com
     http:
       paths:
       - path: /quote
