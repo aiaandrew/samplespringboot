@@ -1,4 +1,4 @@
-# SG Namespace
+# SG NameSpace
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -10,7 +10,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sg-quote-deploy
+  name: singapore-quote-deploy
   namespace: firestorm-sg
 spec:  
   replicas: 3
@@ -48,7 +48,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sg-product-deploy
+  name: Singapore-product-deploy
   namespace: firestorm-sg
 spec:
   replicas: 3
