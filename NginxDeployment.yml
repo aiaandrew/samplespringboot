@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: firestorm-sg
+  name: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -10,7 +10,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: nginx-configuration
-  namespace: firestorm-sg
+  namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -19,7 +19,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: tcp-services
-  namespace: firestorm-sg
+  namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -28,7 +28,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: udp-services
-  namespace: firestorm-sg
+  namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -37,7 +37,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: nginx-ingress-serviceaccount
-  namespace: firestorm-sg
+  namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -101,7 +101,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   name: nginx-ingress-role
-  namespace: firestorm-sg
+  namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -145,7 +145,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: nginx-ingress-role-nisa-binding
-  namespace: firestorm-sg
+  namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -172,13 +172,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: nginx-ingress-serviceaccount
-    namespace: firestorm-sg
+    namespace: kube-ingress
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-ingress-controller
-  namespace: firestorm-sg
+  namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -203,10 +203,10 @@ spec:
           image: aiadevopsaksacr.azurecr.io/nginximage:latest
           args:
             - /nginx-ingress-controller
-            - --configmap=firestorm-sg/nginx-configuration
-            - --tcp-services-configmap=firestorm-sg/tcp-services
-            - --udp-services-configmap=firestorm-sg/udp-services
-            - --publish-service=firestorm-sg/ingress-nginx
+            - --configmap=kube-ingress/nginx-configuration
+            - --tcp-services-configmap=kube-ingress/tcp-services
+            - --udp-services-configmap=kube-ingress/udp-services
+            - --publish-service=kube-ingress/ingress-nginx
             - --annotations-prefix=nginx.ingress.kubernetes.io
           securityContext:
             allowPrivilegeEscalation: true
@@ -218,11 +218,11 @@ spec:
             # www-data -> 33
             runAsUser: 33
           env:
-            - name: firestorm-sg-nginx
+            - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: firestorm-sg
+            - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
