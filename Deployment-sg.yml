@@ -51,7 +51,7 @@ metadata:
   name: sg-product-deploy
   namespace: firestorm-sg
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app:  product-sg
