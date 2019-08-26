@@ -22,7 +22,7 @@ spec:
         prometheus.io/scrape: "true"
     spec:
       serviceAccountName: nginx-ingress-sg-serviceaccount
-      container:
+      containers:
         - name: nginx-ingress-controller
           image: aiadevopsaksacr.azurecr.io/nginximage:latest
           args:
