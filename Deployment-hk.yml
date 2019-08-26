@@ -1,0 +1,106 @@
+# SG NameSpace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: firestorm-hk
+  labels:
+    app: firestorm-hk
+---
+# Honk Kong Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hongkong-quote-deploy
+  namespace: firestorm-hk
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app:  quote-hk
+  template:
+    metadata:
+      labels:
+        app: quote-hk
+    spec:
+      container:
+      - name: quote-hk-container
+        image: aiadevopsaksacr.azurecr.io/quote-hk-image:latest
+        env:
+        - name:  NAME
+          value: quote-hk
+        ports:
+        - containerPort: 80
+---
+# Quote Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: quote-hk-svc
+  namespace: firestorm-hk
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: quote-hk
+---
+# Product deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hongkong-product-deploy
+  namespace: firestorm-hk
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app:  product-hk
+  template:
+    metadata:
+      labels:
+        app: product-hk
+    spec:
+      containers:
+      - name: product-hk-container
+        image: aiadevopsaksacr.azurecr.io/product-hk-image:latest
+        env:
+        - name:  NAME
+          value: product-hk
+        ports:
+        - containerPort: 80
+---
+# Product Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-hk-svc
+  namespace: firestorm-hk
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: product-hk
+---
+# Url Based Routing Ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hk-url-routing-ingress
+  namespace: firestorm-hk
+  annotations:
+    kubernetes.io/ingress.class: hongkong
+    nginx.ingress.kubernetes.io/rewrite-target: /hk/
+spec:
+  rules:
+  - host: firestorm-sample.southeast.cloudapp.azure.com
+    http:
+      paths:
+      - path: /hk/quote
+        backend:
+          serviceName: quote-hk-svc
+          servicePort: 80
+      - path: /hk/product
+        backend:
+          serviceName: product-hk-svc
+          servicePort: 80
