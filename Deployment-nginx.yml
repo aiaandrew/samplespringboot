@@ -183,7 +183,7 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: ingress-nginx
@@ -200,7 +200,7 @@ spec:
       serviceAccountName: nginx-ingress-sg-serviceaccount
       containers:
         - name: nginx-ingress-controller
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
+          image: aiadevopsaksacr.azurecr.io/nginximage:latest
           args:
             - /nginx-ingress-controller
             - --configmap=ingress-nginx/nginx-configuration
@@ -260,7 +260,7 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: ingress-nginx
@@ -277,7 +277,7 @@ spec:
       serviceAccountName: nginx-ingress-sg-serviceaccount
       containers:
         - name: nginx-ingress-controller
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
+          image: aiadevopsaksacr.azurecr.io/nginximage:latest
           args:
             - /nginx-ingress-controller
             - --configmap=ingress-nginx/nginx-configuration
