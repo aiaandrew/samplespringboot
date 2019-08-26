@@ -96,11 +96,11 @@ spec:
   - host: firestorm-hk.southeast.cloudapp.azure.com
     http:
       paths:
-      - path: /hk/quote
+      - path: /quote
         backend:
           serviceName: quote-hk-svc
           servicePort: 80
-      - path: /hk/product
+      - path: /product
         backend:
           serviceName: product-hk-svc
           servicePort: 80
