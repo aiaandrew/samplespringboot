@@ -90,7 +90,7 @@ metadata:
   namespace: firestorm-hk
   annotations:
     kubernetes.io/ingress.class: hongkong
-    nginx.ingress.kubernetes.io/rewrite-target: /hk/
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: firestorm-hk.southeast.cloudapp.azure.com
