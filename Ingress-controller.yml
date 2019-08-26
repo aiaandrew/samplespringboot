@@ -21,8 +21,8 @@ spec:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
     spec:
-      #serviceAccountName: nginx-ingress-sg-serviceaccount
-      containers:
+      serviceAccountName: nginx-ingress-sg-serviceaccount
+      container:
         - name: nginx-ingress-controller
           image: aiadevopsaksacr.azurecr.io/nginximage:latest
           args:
