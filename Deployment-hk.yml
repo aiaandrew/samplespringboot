@@ -10,7 +10,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hongkong-quote-deploy
+  name: hk-quote-deploy
   namespace: firestorm-hk
 spec:
   replicas: 3
@@ -48,7 +48,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hongkong-product-deploy
+  name: hk-product-deploy
   namespace: firestorm-hk
 spec:
   replicas: 2
