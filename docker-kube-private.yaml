@@ -30,7 +30,7 @@ spec:
   template:
     metadata:
       labels:
-        run: sb-web-sample-01-docker
+        run: samplespringboot
     spec:
       containers:
       - name: samplespringboot
