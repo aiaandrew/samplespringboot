@@ -42,11 +42,11 @@ spec:
             # www-data -> 33
             runAsUser: 33
           env:
-            - name: POD_NAME
+            - name: hongkong-product-deploy-5cf68cd54f-7hjv8
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: POD_NAMESPACE
+            - name: firestorm-hk
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
