@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: ingress-nginx
@@ -22,9 +22,9 @@ spec:
         prometheus.io/scrape: "true"
     spec:
       serviceAccountName: nginx-ingress-sg-serviceaccount
-      containers:
+      container:
         - name: nginx-ingress-controller
-          image: aiadevopsaksacr.azurecr.io/nginximage:latest
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
           args:
             - /nginx-ingress-controller
             - --configmap=kube-ingress/nginx-configuration
@@ -42,11 +42,11 @@ spec:
             # www-data -> 33
             runAsUser: 33
           env:
-            - name: hongkong-product-deploy-5cf68cd54f-7hjv8
+            - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: firestorm-hk
+            - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
