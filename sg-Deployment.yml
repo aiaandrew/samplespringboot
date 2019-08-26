@@ -1,0 +1,90 @@
+# SG NameSpace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: firestorm-sg
+  labels:
+    app: firestorm-sg
+---
+# SG Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: singapore-quote-deploy
+  namespace: firestorm-sg
+spec:  
+  replicas: 3
+  selector:
+    matchLabels:
+      app:  quote-sg
+  template:
+    metadata:
+      labels:
+        app: quote-sg
+    spec:
+      containers:
+      - name: quote-sg-container
+        image: aiadevopsaksacr.azurecr.io/quote-sg-image:latest
+        env:
+        - name:  NAME
+          value: quote-sg
+        ports:
+        - containerPort: 80
+---
+# Quote Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: quote-sg-svc
+  namespace: firestorm-sg
+spec:
+  type: ClusterIP
+  ports:  
+  - name: default
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: quote-sg
+---
+# Product deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Singapore-product-deploy
+  namespace: firestorm-sg
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app:  product-sg
+  template:
+    metadata:
+      labels:
+        app: product-sg
+    spec:
+      containers:
+      - name: product-sg-container
+        image: aiadevopsaksacr.azurecr.io/product-sg-image:latest
+        env:
+        - name:  NAME
+          value: product-sg
+        ports:
+        - containerPort: 80
+---
+# Product Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-sg-svc
+  namespace: firestorm-sg
+spec:
+  type: ClusterIP
+  ports:
+  - name: default
+    protocol: TCP
+    port: 80
+    targetPort: 80  
+  selector:
+    app: product-sg
+---
