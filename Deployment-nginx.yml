@@ -10,7 +10,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: nginx-ingress-serviceaccount
-automountServiceAccountToken: false
+automountServiceAccountToken: true
 ---
 kind: ConfigMap
 apiVersion: v1
