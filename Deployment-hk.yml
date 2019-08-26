@@ -1,4 +1,4 @@
-# HK NameSpace
+# SG NameSpace
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -10,7 +10,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hk-quote-deploy
+  name: hongkong-quote-deploy
   namespace: firestorm-hk
 spec:
   replicas: 3
@@ -48,7 +48,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hk-product-deploy
+  name: hongkong-product-deploy
   namespace: firestorm-hk
 spec:
   replicas: 3
