@@ -22,7 +22,7 @@ spec:
       labels:
         app: quote-sg
     spec:
-      container:
+      containers:
       - name: quote-sg-container
         image: aiadevopsaksacr.azurecr.io/quote-sg-image:latest
         env:
