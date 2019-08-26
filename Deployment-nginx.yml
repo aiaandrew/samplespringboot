@@ -177,7 +177,7 @@ subjects:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-ingress-controller
+  name: nginx-ingress-controller-hk
   namespace: kube-ingress
   labels:
     app.kubernetes.io/name: ingress-nginx
