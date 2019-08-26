@@ -22,7 +22,7 @@ spec:
       labels:
         app: quote-hk
     spec:
-      container:
+      containers:
       - name: quote-hk-container
         image: aiadevopsaksacr.azurecr.io/quote-hk-image:latest
         env:
