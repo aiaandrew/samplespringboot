@@ -29,7 +29,7 @@ spec:
         - name:  NAME
           value: quote-hk
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 ---
 # Quote Service
 apiVersion: v1
@@ -67,7 +67,7 @@ spec:
         - name:  NAME
           value: product-hk
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 ---
 # Product Service
 apiVersion: v1
