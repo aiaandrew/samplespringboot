@@ -6,6 +6,12 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx-ingress-serviceaccount
+automountServiceAccountToken: false
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
