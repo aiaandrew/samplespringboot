@@ -371,9 +371,18 @@ spec:
     spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
-        - name: nginx-ingress-controller
+        - name: nginx-ingress-controller  
           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
           args:
+            # - /nginx-ingress-controller
+            # - --configmap=ingress-nginx/nginx-configuration
+            # - --tcp-services-configmap=ingress-nginx/tcp-services
+            # - --udp-services-configmap=ingress-nginx/udp-services
+            # - --publish-service=ingress-nginx/ingress-nginx
+            # - --annotations-prefix=nginx.ingress.kubernetes.io
+            # - --election-id=ingress-controller-leader-nginx
+            # - --ingress-class=nginx-ingress-controller-hk
+            # - --configmap=ingress-nginx/nginx-ingress-controller
             - /nginx-ingress-controller
             - --configmap=$(POD_NAMESPACE)/nginx-configuration
             - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
@@ -451,6 +460,15 @@ spec:
         - name: nginx-ingress-controller
           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
           args:
+            # - /nginx-ingress-controller
+            # - --configmap=ingress-nginx/nginx-configuration
+            # - --tcp-services-configmap=ingress-nginx/tcp-services
+            # - --udp-services-configmap=ingress-nginx/udp-services
+            # - --publish-service=ingress-nginx/ingress-nginx
+            # - --annotations-prefix=nginx.ingress.kubernetes.io
+            # - --election-id=ingress-controller-leader-nginx
+            # - --ingress-class=nginx-ingress-controller-sg
+            # - --configmap=ingress-nginx/nginx-ingress-controller
             - /nginx-ingress-controller
             - --configmap=$(POD_NAMESPACE)/nginx-configuration
             - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
