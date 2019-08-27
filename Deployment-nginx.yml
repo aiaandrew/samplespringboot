@@ -42,6 +42,24 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx-ingress-serviceaccount
+  namespace: firestorm-sg
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx-ingress-serviceaccount
+  namespace: firestorm-hk
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -142,6 +160,94 @@ rules:
       - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: nginx-ingress-role
+  namespace: firestorm-sg
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - pods
+      - secrets
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    resourceNames:
+      # Defaults to "<election-id>-<ingress-class>"
+      # Here: "<ingress-controller-leader>-<nginx>"
+      # This has to be adapted if you change either parameter
+      # when launching the nginx-ingress-controller.
+      - "ingress-controller-leader-nginx"
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: nginx-ingress-role
+  namespace: firestorm-hk
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - pods
+      - secrets
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    resourceNames:
+      # Defaults to "<election-id>-<ingress-class>"
+      # Here: "<ingress-controller-leader>-<nginx>"
+      # This has to be adapted if you change either parameter
+      # when launching the nginx-ingress-controller.
+      - "ingress-controller-leader-nginx"
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: nginx-ingress-role-nisa-binding
@@ -159,6 +265,40 @@ subjects:
     namespace: ingress-nginx
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: nginx-ingress-role-nisa-binding
+  namespace: firestorm-sg
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nginx-ingress-role
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: firestorm-sg
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: nginx-ingress-role-nisa-binding
+  namespace: firestorm-hk
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nginx-ingress-role
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: firestorm-hk
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: nginx-ingress-clusterrole-nisa-binding
@@ -174,11 +314,43 @@ subjects:
     name: nginx-ingress-serviceaccount
     namespace: ingress-nginx
 ---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: nginx-ingress-clusterrole-nisa-binding-sg
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-ingress-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: firestorm-sg
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: nginx-ingress-clusterrole-nisa-binding-hk
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-ingress-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: firestorm-hk
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-ingress-controller-hk
-  namespace: ingress-nginx
+  namespace: firestorm-hk
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -200,7 +372,7 @@ spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
         - name: nginx-ingress-controller  
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
+          image: stable/nginx-ingress
           args:
             - /nginx-ingress-controller
             - --configmap=ingress-nginx/nginx-configuration
@@ -258,7 +430,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-ingress-controller-sg
-  namespace: ingress-nginx
+  namespace: firestorm-sg
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -280,7 +452,7 @@ spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
         - name: nginx-ingress-controller
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
+          image: stable/nginx-ingress
           args:
             - /nginx-ingress-controller
             - --configmap=ingress-nginx/nginx-configuration
@@ -288,7 +460,7 @@ spec:
             - --udp-services-configmap=ingress-nginx/udp-services
             - --publish-service=ingress-nginx/ingress-nginx
             - --annotations-prefix=nginx.ingress.kubernetes.io
-             - --election-id=ingress-controller-leader-nginx
+            - --election-id=ingress-controller-leader-nginx
             - --ingress-class=nginx-ingress-controller-sg
             - --configmap=ingress-nginx/nginx-ingress-controller
           securityContext:
@@ -334,3 +506,21 @@ spec:
             successThreshold: 1
             timeoutSeconds: 10
 ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: ingress-nginx
+#   namespace: ingress-nginx
+# spec:
+#   type: ClusterIP
+#   ports:
+#   - name: http
+#     port: 80
+#     targetPort: 80
+#     protocol: TCP
+#   - name: https
+#     port: 443
+#     targetPort: 443
+#     protocol: TCP
+#   selector:
+#     app: ingress-nginx
