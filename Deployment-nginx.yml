@@ -371,18 +371,15 @@ spec:
     spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
-        - name: nginx-ingress-controller  
+        - name: nginx-ingress-controller
           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
           args:
             - /nginx-ingress-controller
-            - --configmap=ingress-nginx/nginx-configuration
-            - --tcp-services-configmap=ingress-nginx/tcp-services
-            - --udp-services-configmap=ingress-nginx/udp-services
-            - --publish-service=ingress-nginx/ingress-nginx
+            - --configmap=$(POD_NAMESPACE)/nginx-configuration
+            - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
+            - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
+            - --publish-service=$(POD_NAMESPACE)/ingress-nginx
             - --annotations-prefix=nginx.ingress.kubernetes.io
-            - --election-id=ingress-controller-leader-nginx
-            - --ingress-class=nginx-ingress-controller-hk
-            - --configmap=ingress-nginx/nginx-ingress-controller
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
@@ -425,7 +422,7 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
----
+            ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -455,14 +452,11 @@ spec:
           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
           args:
             - /nginx-ingress-controller
-            - --configmap=ingress-nginx/nginx-configuration
-            - --tcp-services-configmap=ingress-nginx/tcp-services
-            - --udp-services-configmap=ingress-nginx/udp-services
-            - --publish-service=ingress-nginx/ingress-nginx
+            - --configmap=$(POD_NAMESPACE)/nginx-configuration
+            - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
+            - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
+            - --publish-service=$(POD_NAMESPACE)/ingress-nginx
             - --annotations-prefix=nginx.ingress.kubernetes.io
-            - --election-id=ingress-controller-leader-nginx
-            - --ingress-class=nginx-ingress-controller-sg
-            - --configmap=ingress-nginx/nginx-ingress-controller
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
@@ -505,6 +499,166 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
+#---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nginx-ingress-controller-hk
+#   namespace: firestorm-hk
+#   labels:
+#     app.kubernetes.io/name: ingress-nginx
+#     app.kubernetes.io/part-of: ingress-nginx
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/name: ingress-nginx
+#       app.kubernetes.io/part-of: ingress-nginx
+#   template:
+#     metadata:
+#       labels:
+#         app.kubernetes.io/name: ingress-nginx
+#         app.kubernetes.io/part-of: ingress-nginx
+#       annotations:
+#         prometheus.io/port: "10254"
+#         prometheus.io/scrape: "true"
+#     spec:
+#       serviceAccountName: nginx-ingress-serviceaccount
+#       containers:
+#         - name: nginx-ingress-controller  
+#           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
+#           args:
+#             - /nginx-ingress-controller
+#             - --configmap=ingress-nginx/nginx-configuration
+#             - --tcp-services-configmap=ingress-nginx/tcp-services
+#             - --udp-services-configmap=ingress-nginx/udp-services
+#             - --publish-service=ingress-nginx/ingress-nginx
+#             - --annotations-prefix=nginx.ingress.kubernetes.io
+#             - --election-id=ingress-controller-leader-nginx
+#             - --ingress-class=nginx-ingress-controller-hk
+#             - --configmap=ingress-nginx/nginx-ingress-controller
+#           securityContext:
+#             allowPrivilegeEscalation: true
+#             capabilities:
+#               drop:
+#                 - ALL
+#               add:
+#                 - NET_BIND_SERVICE
+#             # www-data -> 33
+#             runAsUser: 33
+#           env:
+#             - name: POD_NAME
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: metadata.name
+#             - name: POD_NAMESPACE
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: metadata.namespace
+#           ports:
+#             - name: http
+#               containerPort: 80
+#             - name: https
+#               containerPort: 443
+#           livenessProbe:
+#             failureThreshold: 3
+#             httpGet:
+#               path: /healthz
+#               port: 10254
+#               scheme: HTTP
+#             initialDelaySeconds: 10
+#             periodSeconds: 10
+#             successThreshold: 1
+#             timeoutSeconds: 10
+#           readinessProbe:
+#             failureThreshold: 3
+#             httpGet:
+#               path: /healthz
+#               port: 10254
+#               scheme: HTTP
+#             periodSeconds: 10
+#             successThreshold: 1
+#             timeoutSeconds: 10
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nginx-ingress-controller-sg
+#   namespace: firestorm-sg
+#   labels:
+#     app.kubernetes.io/name: ingress-nginx
+#     app.kubernetes.io/part-of: ingress-nginx
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/name: ingress-nginx
+#       app.kubernetes.io/part-of: ingress-nginx
+#   template:
+#     metadata:
+#       labels:
+#         app.kubernetes.io/name: ingress-nginx
+#         app.kubernetes.io/part-of: ingress-nginx
+#       annotations:
+#         prometheus.io/port: "10254"
+#         prometheus.io/scrape: "true"
+#     spec:
+#       serviceAccountName: nginx-ingress-serviceaccount
+#       containers:
+#         - name: nginx-ingress-controller
+#           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
+#           args:
+#             - /nginx-ingress-controller
+#             - --configmap=ingress-nginx/nginx-configuration
+#             - --tcp-services-configmap=ingress-nginx/tcp-services
+#             - --udp-services-configmap=ingress-nginx/udp-services
+#             - --publish-service=ingress-nginx/ingress-nginx
+#             - --annotations-prefix=nginx.ingress.kubernetes.io
+#             - --election-id=ingress-controller-leader-nginx
+#             - --ingress-class=nginx-ingress-controller-sg
+#             - --configmap=ingress-nginx/nginx-ingress-controller
+#           securityContext:
+#             allowPrivilegeEscalation: true
+#             capabilities:
+#               drop:
+#                 - ALL
+#               add:
+#                 - NET_BIND_SERVICE
+#             # www-data -> 33
+#             runAsUser: 33
+#           env:
+#             - name: POD_NAME
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: metadata.name
+#             - name: POD_NAMESPACE
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: metadata.namespace
+#           ports:
+#             - name: http
+#               containerPort: 80
+#             - name: https
+#               containerPort: 443
+#           livenessProbe:
+#             failureThreshold: 3
+#             httpGet:
+#               path: /healthz
+#               port: 10254
+#               scheme: HTTP
+#             initialDelaySeconds: 10
+#             periodSeconds: 10
+#             successThreshold: 1
+#             timeoutSeconds: 10
+#           readinessProbe:
+#             failureThreshold: 3
+#             httpGet:
+#               path: /healthz
+#               port: 10254
+#               scheme: HTTP
+#             periodSeconds: 10
+#             successThreshold: 1
+#             timeoutSeconds: 10
 ---
 apiVersion: v1
 kind: Service
@@ -517,6 +671,9 @@ metadata:
 spec:
   externalTrafficPolicy: Local
   type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
   ports:
   - name: http
     port: 80
@@ -538,6 +695,9 @@ metadata:
 spec:
   externalTrafficPolicy: Local
   type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
   ports:
   - name: http
     port: 80
