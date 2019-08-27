@@ -372,7 +372,7 @@ spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
         - name: nginx-ingress-controller  
-          image: stable/nginx-ingress
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
           args:
             - /nginx-ingress-controller
             - --configmap=ingress-nginx/nginx-configuration
@@ -452,7 +452,7 @@ spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
         - name: nginx-ingress-controller
-          image: stable/nginx-ingress
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
           args:
             - /nginx-ingress-controller
             - --configmap=ingress-nginx/nginx-configuration
