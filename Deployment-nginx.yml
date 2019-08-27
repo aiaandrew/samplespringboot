@@ -523,7 +523,6 @@ spec:
     targetPort: 443
     protocol: TCP
   selector:
-    matchLabels:
       app.kubernetes.io/name: ingress-nginx-hk
       app.kubernetes.io/part-of: ingress-nginx-hk
 ---
@@ -544,6 +543,5 @@ spec:
     targetPort: 443
     protocol: TCP
   selector:
-    matchLabels:
       app.kubernetes.io/name: ingress-nginx-sg
       app.kubernetes.io/part-of: ingress-nginx-sg
