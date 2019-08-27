@@ -512,11 +512,11 @@ metadata:
   name: ingress-nginx-hk
   namespace: firestorm-hk
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - name: http
     port: 80
-    nodePort: 32008
+    targetPort: 80
     protocol: TCP
   - name: https
     port: 443
@@ -531,11 +531,11 @@ metadata:
   name: ingress-nginx-sg
   namespace: firestorm-sg
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - name: http
     port: 80
-    nodePort: 32007
+    targetPort: 80
     protocol: TCP
   - name: https
     port: 443
