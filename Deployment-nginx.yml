@@ -509,7 +509,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingress-nginx
+  name: ingress-nginx-hk
   namespace: firestorm-hk
 spec:
   type: ClusterIP
@@ -528,7 +528,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingress-nginx
+  name: ingress-nginx-sg
   namespace: firestorm-sg
 spec:
   type: ClusterIP
