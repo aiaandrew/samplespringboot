@@ -523,7 +523,9 @@ spec:
     targetPort: 443
     protocol: TCP
   selector:
-    app: ingress-nginx
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/part-of: ingress-nginx
 ---
 apiVersion: v1
 kind: Service
@@ -542,5 +544,6 @@ spec:
     targetPort: 443
     protocol: TCP
   selector:
-    app: ingress-nginx
----
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/part-of: ingress-nginx
