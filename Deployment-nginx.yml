@@ -524,7 +524,7 @@ spec:
     protocol: TCP
   selector:
     app: ingress-nginx
-    ---
+---
 apiVersion: v1
 kind: Service
 metadata:
