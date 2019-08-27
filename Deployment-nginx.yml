@@ -352,19 +352,19 @@ metadata:
   name: nginx-ingress-controller-hk
   namespace: firestorm-hk
   labels:
-    app.kubernetes.io/name: ingress-nginx-hk
-    app.kubernetes.io/part-of: ingress-nginx-hk
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: ingress-nginx-hk
-      app.kubernetes.io/part-of: ingress-nginx-hk
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/part-of: ingress-nginx
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: ingress-nginx-hk
-        app.kubernetes.io/part-of: ingress-nginx-hk
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/part-of: ingress-nginx
       annotations:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
@@ -432,19 +432,19 @@ metadata:
   name: nginx-ingress-controller-sg
   namespace: firestorm-sg
   labels:
-    app.kubernetes.io/name: ingress-nginx-sg
-    app.kubernetes.io/part-of: ingress-nginx-sg
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: ingress-nginx-sg
-      app.kubernetes.io/part-of: ingress-nginx-sg
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/part-of: ingress-nginx
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: ingress-nginx-sg
-        app.kubernetes.io/part-of: ingress-nginx-sg
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/part-of: ingress-nginx
       annotations:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
@@ -523,8 +523,7 @@ spec:
     targetPort: 443
     protocol: TCP
   selector:
-      app.kubernetes.io/name: ingress-nginx-hk
-      app.kubernetes.io/part-of: ingress-nginx-hk
+    app: ingress-nginx
 ---
 apiVersion: v1
 kind: Service
@@ -543,5 +542,5 @@ spec:
     targetPort: 443
     protocol: TCP
   selector:
-      app.kubernetes.io/name: ingress-nginx-sg
-      app.kubernetes.io/part-of: ingress-nginx-sg
+    app: ingress-nginx
+---
