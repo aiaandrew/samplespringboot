@@ -1,0 +1,54 @@
+# Url Based Routing Ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hk-url-routing-ingress
+  namespace: firestorm-hk
+  annotations:
+    kubernetes.io/ingress.class: nginx-ingress-controller-hk
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "*"
+spec:
+  rules:
+  - #host: firestorm-hk.southeast.cloudapp.azure.com
+    http:
+      paths:
+      - path: /quote
+        backend:
+          serviceName: quote-hk-svc
+          servicePort: 8088
+      - path: /product
+        backend:
+          serviceName: product-hk-svc
+          servicePort: 8089
+---
+# Url Based Routing Ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sg-url-routing-ingress
+  namespace: firestorm-sg
+  annotations:
+    kubernetes.io/ingress.class: nginx-ingress-controller-sg
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "*"
+spec:
+  rules:
+  - #host: firestorm-sg.southeast.cloudapp.azure.com
+    http:
+      paths:
+      - path: /quote
+        backend:
+          serviceName: quote-sg-svc
+          servicePort: 8086
+      - path: /product
+        backend:
+          serviceName: product-sg-svc
+          servicePort: 8087
+---
